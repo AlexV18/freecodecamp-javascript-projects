@@ -12,4 +12,4 @@ To obtain credit for each project, one must:
 
 For more information on the requirements, please visit: https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures
 
-As of the writing of this READ.md on 11/22/22, I've completed: `(3/5)` projects.
+As of the writing of this READ.md on 11/28/22, I've completed: `(4/5)` projects.
