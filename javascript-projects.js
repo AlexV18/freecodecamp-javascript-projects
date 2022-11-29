@@ -154,3 +154,105 @@ phone number; otherwise return false.
   }
   
   telephoneCheck("555-555-5555");
+
+/*
+    Project #5: CASH REGISTER
+    Design a cash register drawer function checkCashRegister() that accepts purchase price as the first argument (price), 
+    payment as the second argument (cash), and cash-in-drawer (cid) as the third argument.
+
+cid is a 2D array listing available currency.
+
+The checkCashRegister() function should always return an object with a status key and a change key.
+
+Return {status: "INSUFFICIENT_FUNDS", change: []} if cash-in-drawer is less than the change due, or if you cannot return the exact change.
+
+Return {status: "CLOSED", change: [...]} with cash-in-drawer as the value for the key change if it is equal to the change due.
+
+Otherwise, return {status: "OPEN", change: [...]}, with the change due in coins and bills, 
+sorted in highest to lowest order, as the value of the change key.
+
+Currency Unit	Amount
+Penny	$0.01 (PENNY)
+Nickel	$0.05 (NICKEL)
+Dime	$0.1 (DIME)
+Quarter	$0.25 (QUARTER)
+Dollar	$1 (ONE)
+Five Dollars	$5 (FIVE)
+Ten Dollars	$10 (TEN)
+Twenty Dollars	$20 (TWENTY)
+One-hundred Dollars	$100 (ONE HUNDRED)
+*/
+
+function checkCashRegister(price, cash, cid) {
+  let change = cash-price;
+  var cashInDrawer = 0.0;
+  for(var i = 0; i<cid.length; i++){ cashInDrawer += cid[i][1];}
+  if (change == cashInDrawer){ 
+    change = cid;
+    return {status: "CLOSED", change}
+  }
+  else if (change > cashInDrawer){
+    change = [];
+    return {status: "INSUFFICIENT_FUNDS", change}
+  }
+  let changeArray = [];
+  var changeAquired = change;
+  while (changeAquired > 0){
+    var array_added = []
+    if(changeAquired > 100 && cid[8][1] >= 100){
+      changeAquired -= 100;
+      array_added = ["ONE HUNDRED", 100]
+      cid[8][1] -= 100; }
+    else if(changeAquired >= 20 && cid[7][1] >= 20){
+      changeAquired -= 20;
+      array_added = ["TWENTY", 20]
+      cid[7][1] -= 20; }
+    else if(changeAquired >= 10 && cid[6][1] >= 10){
+      changeAquired -= 10;
+      array_added = ["TEN", 10]
+      cid[6][1] -= 10; }
+    else if(changeAquired >= 5 && cid[5][1] >= 5){
+      changeAquired -= 5;
+      array_added = ["FIVE", 5]
+      cid[5][1] -= 5; }
+    else if(changeAquired >= 1 && cid[4][1] >= 1){
+      changeAquired -= 1;
+      array_added = ["ONE", 1]
+      cid[4][1] -= 1; }
+    else if(changeAquired >= 0.25 && cid[3][1] >= 0.25){
+      changeAquired -= 0.25;
+      array_added = ["QUARTER", 0.25]
+      cid[3][1] -= 0.25; }
+    else if(changeAquired >= 0.1 && cid[2][1] >= 0.1){
+      changeAquired -= 0.1;
+      array_added = ["DIME", 0.1]
+      cid[2][1] -= 0.1; }
+    else if(changeAquired >= 0.05 && cid[1][1] >= 0.05){
+      changeAquired -= 0.05;
+      array_added = ["NICKEL", 0.05]
+      cid[1][1] -= 0.05; }
+    else if(Math.abs(changeAquired - 0.01) < 0.1 && cid[0][1] >= 0.01){
+      changeAquired -= 0.01;
+      array_added = ["PENNY", 0.01]
+      cid[0][1] -= 0.01; }
+    else{
+      change = [];
+      return {status: "INSUFFICIENT_FUNDS", change}
+    }
+    if(changeArray.length == 0){ changeArray.push(array_added)}
+    else {
+      var found = false;
+      for(var i = 0; i<changeArray.length; i++){ 
+        if(changeArray[i][0] == array_added[0]){ 
+          changeArray[i][1] += array_added[1]; 
+          found = true;}
+      }
+      if(!found){ changeArray.push(array_added);}
+    }
+  }
+  
+  change = changeArray;
+  return {status: "OPEN", change}
+}
+
+console.log(checkCashRegister(3.26, 100, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]))
